@@ -1,0 +1,16 @@
+spring:
+  datasource:
+    username: destiny
+    password: Aa31415926927
+    url: jdbc:mysql://rm-uf6y4r4522v2nxq7u125010vm.mysql.rds.aliyuncs.com:3306/destiny?serverTimezone=GMT
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  devtools:
+    restart:
+      enabled: true
+      additional-paths: src/main/java
+
+mybatis:
+  mapper-locations: classpath*:mapper/*.xml
+  type-aliases-package: cn.lloml.destinyrecruit.domain
+  configuration:
+    map-underscore-to-camel-case: true
