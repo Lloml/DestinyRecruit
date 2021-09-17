@@ -1,13 +1,18 @@
 package cn.lloml.destinyrecruit.controller;
 
 
+import cn.lloml.destinyrecruit.common.CustomResponse;
+import cn.lloml.destinyrecruit.common.CustomResponseBody;
 import cn.lloml.destinyrecruit.domain.User;
+import cn.lloml.destinyrecruit.dto.UserDTO;
 import cn.lloml.destinyrecruit.service.UserService;
-import javassist.tools.web.BadHttpRequest;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.HttpClientErrorException;
 
 import javax.annotation.Resource;
 import java.util.HashMap;
@@ -22,19 +27,22 @@ public class UserController {
     private UserService userService;
 
     @GetMapping
-    public List<User> getUserList(){
+    public List<User> getUserList() {
         return userService.selectAll();
     }
 
     @PostMapping
-    @ResponseBody
-    public void postUser(@Validated User user, BindingResult bindingResult) {
-        Map<String, Object> map = new HashMap<>(16);
+    public ResponseEntity<CustomResponseBody<Object>> postUser(@Validated @RequestBody UserDTO userDto, BindingResult bindingResult) {
         if (null != bindingResult && bindingResult.hasErrors()) {
-            List<FieldError> fieldErrorsList = bindingResult.getFieldErrors();
-            System.out.println("the field error is " + fieldErrorsList);
-            map.put("parameterErrors", fieldErrorsList);
+            return CustomResponse.badRequest(bindingResult.getFieldErrors());
         }
-//        userService.insert(user);
+        if (userService.selectOneByBungieName(userDto.getBungieName()) != null) {
+            return CustomResponse.conflict("此BungieName已存在");
+        }
+        var user = new User();
+        user.setBungieName(userDto.getBungieName());
+        user.setDestinyMembershipId(156165153165L);
+        userService.insert(user);
+        return CustomResponse.ok("ok");
     }
 }

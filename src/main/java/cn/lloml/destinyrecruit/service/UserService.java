@@ -1,6 +1,6 @@
 package cn.lloml.destinyrecruit.service;
 
-import cn.lloml.destinyrecruit.utils.SnowflakeIdWorker;
+import cn.lloml.destinyrecruit.util.SnowflakeIdWorker;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -28,6 +28,7 @@ public class UserService {
     }
 
 
+
     public int insert(User record) {
         record.setId(snowflakeIdWorker.nextId());
         return userMapper.insert(record);
@@ -41,6 +42,10 @@ public class UserService {
 
     public User selectByPrimaryKey(Long id) {
         return userMapper.selectByPrimaryKey(id);
+    }
+
+    public User selectOneByBungieName(String bungieName){
+        return  userMapper.selectOneByBungieName(bungieName);
     }
 
 

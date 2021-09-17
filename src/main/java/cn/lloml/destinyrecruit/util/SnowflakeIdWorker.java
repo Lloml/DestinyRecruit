@@ -1,4 +1,4 @@
-package cn.lloml.destinyrecruit.utils;
+package cn.lloml.destinyrecruit.util;
 
 import org.springframework.stereotype.Repository;
 

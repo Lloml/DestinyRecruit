@@ -1,4 +1,6 @@
-package cn.lloml.destinyrecruit.domain;
+package cn.lloml.destinyrecruit.dto;
+
+
 
 import java.io.Serializable;
 import javax.validation.constraints.NotBlank;
@@ -7,15 +9,13 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
 
-public class User implements Serializable {
+public class UserDTO implements Serializable {
 
     private Long id;
 
-    @NotNull
     @NotEmpty
     private String bungieName;
 
-    @NotNull
     private Long destinyMembershipId;
 
     private String toekn;

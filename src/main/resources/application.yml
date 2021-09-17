@@ -14,3 +14,5 @@ mybatis:
   type-aliases-package: cn.lloml.destinyrecruit.domain
   configuration:
     map-underscore-to-camel-case: true
+server:
+  port: 8088
