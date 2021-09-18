@@ -49,7 +49,7 @@ public class UserController {
         }
         var user = new User();
         user.setBungieName(userDto.getBungieName());
-        user.setDestinyMembershipId(156165153165L);
+        user.setDestinyMembershipId(membershipId);
         userService.insert(user);
         return CustomResponse.ok("ok");
     }
