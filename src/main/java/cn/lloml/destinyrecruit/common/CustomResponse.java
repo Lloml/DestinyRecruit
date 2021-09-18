@@ -32,9 +32,9 @@ public class CustomResponse {
         );
     }
 
-    public static <T> ResponseEntity<CustomResponseBody<T>> badRequest(String message, String error) {
+    public static <T> ResponseEntity<CustomResponseBody<T>> badRequest(String message) {
         return new ResponseEntity<>(
-                new CustomResponseBody<>(HttpStatus.BAD_REQUEST.value(), message, error),
+                new CustomResponseBody<>(HttpStatus.BAD_REQUEST.value(), message, "Bad Request"),
                 CustomResponse.getGeneralHeaders(),
                 HttpStatus.BAD_REQUEST
         );
