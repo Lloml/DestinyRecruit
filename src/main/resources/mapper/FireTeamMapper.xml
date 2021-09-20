@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.lloml.destinyrecruit.mapper.FireTeamMapper">
+    <resultMap id="BaseResultMap" type="cn.lloml.destinyrecruit.domain.FireTeam">
+        <!--@mbg.generated-->
+        <!--@Table fire_team-->
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="title" jdbcType="VARCHAR" property="title"/>
+        <result column="description" jdbcType="VARCHAR" property="description"/>
+        <result column="game_map_id" jdbcType="BIGINT" property="gameMapId"/>
+        <result column="created_date" jdbcType="TIMESTAMP" property="createdDate"/>
+        <result column="update_date" jdbcType="TIMESTAMP" property="updateDate"/>
+    </resultMap>
+    <resultMap id="UserOfFireTeam" type="cn.lloml.destinyrecruit.dto.UserOfFireTeamDTO"
+               extends="cn.lloml.destinyrecruit.mapper.UserMapper.BaseResultMap">
+        <result column="fire_team__user__is_owner" jdbcType="BOOLEAN" property="owner"/>
+    </resultMap>
+    <resultMap id="DTOResultMap" type="cn.lloml.destinyrecruit.dto.FireTeamSelectDTO">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="title" jdbcType="VARCHAR" property="title"/>
+        <result column="description" jdbcType="VARCHAR" property="description"/>
+        <result column="created_date" jdbcType="TIMESTAMP" property="createdDate"/>
+        <result column="update_date" jdbcType="TIMESTAMP" property="updateDate"/>
+        <association property="gameMode" javaType="cn.lloml.destinyrecruit.domain.GameMode"
+                     resultMap="cn.lloml.destinyrecruit.mapper.GameModeMapper.BaseResultMap" column="game_map_id">
+        </association>
+        <association property="gameMap" javaType="cn.lloml.destinyrecruit.domain.GameMap"
+                     resultMap="cn.lloml.destinyrecruit.mapper.GameMapMapper.BaseResultMap">
+        </association>
+        <collection property="memberList" ofType="cn.lloml.destinyrecruit.dto.UserOfFireTeamDTO"
+                    resultMap="UserOfFireTeam">
+        </collection>
+    </resultMap>
+    <sql id="Base_Column_List">
+        <!--@mbg.generated-->
+        id, title, description, game_map_id, created_date, update_date
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        <!--@mbg.generated-->
+        select
+        <include refid="Base_Column_List"/>
+        from fire_team
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        <!--@mbg.generated-->
+        delete
+        from fire_team
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
+    <insert id="insert" parameterType="cn.lloml.destinyrecruit.domain.FireTeam">
+        <!--@mbg.generated-->
+        insert into fire_team (id, title, description,
+                               game_map_id, created_date, update_date)
+        values (#{id,jdbcType=BIGINT}, #{title,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR},
+                #{gameMapId,jdbcType=BIGINT}, #{createdDate,jdbcType=TIMESTAMP}, #{updateDate,jdbcType=TIMESTAMP})
+    </insert>
+    <insert id="insertSelective" parameterType="cn.lloml.destinyrecruit.domain.FireTeam">
+        <!--@mbg.generated-->
+        insert into fire_team
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="title != null">
+                title,
+            </if>
+            <if test="description != null">
+                description,
+            </if>
+            <if test="gameMapId != null">
+                game_map_id,
+            </if>
+            <if test="createdDate != null">
+                created_date,
+            </if>
+            <if test="updateDate != null">
+                update_date,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="title != null">
+                #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="description != null">
+                #{description,jdbcType=VARCHAR},
+            </if>
+            <if test="gameMapId != null">
+                #{gameMapId,jdbcType=BIGINT},
+            </if>
+            <if test="createdDate != null">
+                #{createdDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateDate != null">
+                #{updateDate,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="cn.lloml.destinyrecruit.domain.FireTeam">
+        <!--@mbg.generated-->
+        update fire_team
+        <set>
+            <if test="title != null">
+                title = #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="description != null">
+                description = #{description,jdbcType=VARCHAR},
+            </if>
+            <if test="gameMapId != null">
+                game_map_id = #{gameMapId,jdbcType=BIGINT},
+            </if>
+            <if test="createdDate != null">
+                created_date = #{createdDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateDate != null">
+                update_date = #{updateDate,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="cn.lloml.destinyrecruit.domain.FireTeam">
+        <!--@mbg.generated-->
+        update fire_team
+        set title        = #{title,jdbcType=VARCHAR},
+            description  = #{description,jdbcType=VARCHAR},
+            game_map_id  = #{gameMapId,jdbcType=BIGINT},
+            created_date = #{createdDate,jdbcType=TIMESTAMP},
+            update_date  = #{updateDate,jdbcType=TIMESTAMP}
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <select id="selectByAll" resultMap="BaseResultMap">
+        <!--@mbg.generated-->
+        select
+        <include refid="Base_Column_List"/>
+        from fire_team
+        <where>
+            <if test="id != null">
+                and id = #{id,jdbcType=BIGINT}
+            </if>
+            <if test="title != null">
+                and title = #{title,jdbcType=VARCHAR}
+            </if>
+            <if test="description != null">
+                and description = #{description,jdbcType=VARCHAR}
+            </if>
+            <if test="gameMapId != null">
+                and game_map_id = #{gameMapId,jdbcType=BIGINT}
+            </if>
+            <if test="createdDate != null">
+                and created_date = #{createdDate,jdbcType=TIMESTAMP}
+            </if>
+            <if test="updateDate != null">
+                and update_date = #{updateDate,jdbcType=TIMESTAMP}
+            </if>
+        </where>
+    </select>
+    <select id="selectDTOByPrimaryKey" parameterType="java.lang.Long" resultMap="DTOResultMap">
+        <!--@mbg.generated-->
+        select destiny.fire_team.*,
+        <include refid="cn.lloml.destinyrecruit.mapper.GameModeMapper.Base_Column_List">
+        </include>
+        ,
+        <include refid="cn.lloml.destinyrecruit.mapper.GameMapMapper.Base_Column_List">
+        </include>
+        ,
+        <include refid="cn.lloml.destinyrecruit.mapper.UserMapper.Base_Column_List">
+        </include>
+        ,
+                fire_team__user.is_owner as fire_team__user__is_owner
+                FROM destiny.fire_team
+                             LEFT JOIN
+                             destiny.game_map
+                                     ON
+                                             destiny.fire_team.game_map_id = destiny.game_map.id
+                             LEFT JOIN
+                             destiny.game_mode
+                                     ON
+                                             destiny.game_map.game_mode_id = destiny.game_mode.id
+                             LEFT JOIN
+                             destiny.fire_team__user
+                                     ON
+                                             destiny.fire_team__user.fire_team_id = destiny.fire_team.id
+                             LEFT JOIN
+                             destiny.`user`
+                                     ON
+                                             destiny.`user`.id = destiny.fire_team__user.user_id
+        <where>
+            destiny.fire_team.id = #{id,jdbcType=BIGINT}
+        </where>
+    </select>
+    <select id="selectDTO" resultMap="DTOResultMap">
+        select destiny.fire_team.*,
+        <include refid="cn.lloml.destinyrecruit.mapper.GameModeMapper.Base_Column_List">
+        </include>
+        ,
+        <include refid="cn.lloml.destinyrecruit.mapper.GameMapMapper.Base_Column_List">
+        </include>
+        ,
+        <include refid="cn.lloml.destinyrecruit.mapper.UserMapper.Base_Column_List">
+        </include>
+        ,
+                fire_team__user.is_owner as fire_team__user__is_owner
+                FROM destiny.fire_team
+                             LEFT JOIN
+                             destiny.game_map
+                                     ON
+                                             destiny.fire_team.game_map_id = destiny.game_map.id
+                             LEFT JOIN
+                             destiny.game_mode
+                                     ON
+                                             destiny.game_map.game_mode_id = destiny.game_mode.id
+                             LEFT JOIN
+                             destiny.fire_team__user
+                                     ON
+                                             destiny.fire_team__user.fire_team_id = destiny.fire_team.id
+                             LEFT JOIN
+                             destiny.`user`
+                                     ON
+                                             destiny.`user`.id = destiny.fire_team__user.user_id
+        <where>
+        </where>
+    </select>
+</mapper>

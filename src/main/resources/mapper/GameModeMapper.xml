@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.lloml.destinyrecruit.mapper.GameModeMapper">
+    <resultMap id="BaseResultMap" type="cn.lloml.destinyrecruit.domain.GameMode">
+        <!--@mbg.generated-->
+        <!--@Table game_mode-->
+        <id column="game_mode__id" jdbcType="BIGINT" property="id"/>
+        <result column="game_mode__name" jdbcType="VARCHAR" property="name"/>
+        <result column="game_mode__max_number" jdbcType="INTEGER" property="maxNumber"/>
+        <result column="game_mode__img_url" jdbcType="VARCHAR" property="imgUrl"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        <!--@mbg.generated-->
+        game_mode.id as game_mode__id, game_mode.`name` as game_mode__name, game_mode.max_number as
+        game_mode__max_number,
+        game_mode.img_url as game_mode__img_url
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        <!--@mbg.generated-->
+        select
+        <include refid="Base_Column_List"/>
+        from game_mode
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        <!--@mbg.generated-->
+        delete
+        from game_mode
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
+    <insert id="insert" parameterType="cn.lloml.destinyrecruit.domain.GameMode">
+        <!--@mbg.generated-->
+        insert into game_mode (id, `name`, max_number,
+                               img_url)
+        values (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{maxNumber,jdbcType=INTEGER},
+                #{imgUrl,jdbcType=VARCHAR})
+    </insert>
+    <insert id="insertSelective" parameterType="cn.lloml.destinyrecruit.domain.GameMode">
+        <!--@mbg.generated-->
+        insert into game_mode
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="name != null">
+                `name`,
+            </if>
+            <if test="maxNumber != null">
+                max_number,
+            </if>
+            <if test="imgUrl != null">
+                img_url,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="maxNumber != null">
+                #{maxNumber,jdbcType=INTEGER},
+            </if>
+            <if test="imgUrl != null">
+                #{imgUrl,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="cn.lloml.destinyrecruit.domain.GameMode">
+        <!--@mbg.generated-->
+        update game_mode
+        <set>
+            <if test="name != null">
+                `name` = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="maxNumber != null">
+                max_number = #{maxNumber,jdbcType=INTEGER},
+            </if>
+            <if test="imgUrl != null">
+                img_url = #{imgUrl,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="cn.lloml.destinyrecruit.domain.GameMode">
+        <!--@mbg.generated-->
+        update game_mode
+        set `name`     = #{name,jdbcType=VARCHAR},
+            max_number = #{maxNumber,jdbcType=INTEGER},
+            img_url    = #{imgUrl,jdbcType=VARCHAR}
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+    <select id="selectByAll" resultMap="BaseResultMap">
+        <!--@mbg.generated-->
+        select
+        <include refid="Base_Column_List"/>
+        from game_mode
+        <where>
+            <if test="id != null">
+                and id = #{id,jdbcType=BIGINT}
+            </if>
+            <if test="name != null">
+                and `name` = #{name,jdbcType=VARCHAR}
+            </if>
+            <if test="maxNumber != null">
+                and max_number = #{maxNumber,jdbcType=INTEGER}
+            </if>
+            <if test="imgUrl != null">
+                and img_url = #{imgUrl,jdbcType=VARCHAR}
+            </if>
+        </where>
+    </select>
+</mapper>

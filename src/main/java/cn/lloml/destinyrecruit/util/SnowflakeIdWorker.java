@@ -3,7 +3,7 @@ package cn.lloml.destinyrecruit.util;
 import org.springframework.stereotype.Repository;
 
 /**
- * SnowFlake
+ * SnowFlake工具类，用于创建uuid
  */
 @Repository
 public class SnowflakeIdWorker {

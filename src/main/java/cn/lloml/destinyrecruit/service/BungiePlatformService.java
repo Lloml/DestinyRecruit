@@ -3,6 +3,7 @@ package cn.lloml.destinyrecruit.service;
 import cn.lloml.destinyrecruit.util.HttpClientUtil;
 import com.alibaba.fastjson.JSONObject;
 import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.yaml.snakeyaml.util.UriEncoder;
 
@@ -13,7 +14,7 @@ import java.util.*;
 /**
  * 棒鸡平台服务
  */
-@Repository
+@Service
 public class BungiePlatformService {
     @Resource
     HttpClientUtil httpClientUtil;
@@ -24,7 +25,7 @@ public class BungiePlatformService {
 
     final int membershipType = 3;
 
-    final  String X_API_Key = "6b5703eeebce45c8911a1ec357abec52";
+    final String X_API_Key = "6b5703eeebce45c8911a1ec357abec52";
 
     /**
      * @param pathList 路径列表
@@ -54,27 +55,18 @@ public class BungiePlatformService {
         pathList.add("SearchDestinyPlayer");
         pathList.add(String.valueOf(membershipType));
         pathList.add(UriEncoder.encode(bungieName));
-
-        System.out.println(getURIString(pathList));
-        System.out.println(bungieName);
-        System.out.println(UriEncoder.encode(bungieName));
-        try {
-            var res = httpClientUtil.get(
-                    getURIString(pathList),
-                    getDefaultHeaders()
-            );
-            System.out.println("test");
-            System.out.println(res);
-            var resObject = JSONObject.parseObject(res.body());
-            var responseArray = resObject.getJSONArray("Response");
-            if (responseArray.toArray().length == 0) {
-                return null;
-            } else {
-                return responseArray.getJSONObject(0).getLong("membershipId");
-            }
-        } catch (HttpClientErrorException | InterruptedException | IOException e) {
-            e.printStackTrace();
+        var res = httpClientUtil.get(
+                getURIString(pathList),
+                getDefaultHeaders()
+        );
+        if (res == null) {
             return null;
+        }
+        var responseArray = res.getJSONArray("Response");
+        if (responseArray.toArray().length == 0) {
+            return null;
+        } else {
+            return responseArray.getJSONObject(0).getLong("membershipId");
         }
     }
 

@@ -3,10 +3,7 @@ package cn.lloml.destinyrecruit.dto;
 
 
 import java.io.Serializable;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
 
 
 public class UserDTO implements Serializable {
@@ -18,7 +15,7 @@ public class UserDTO implements Serializable {
 
     private Long destinyMembershipId;
 
-    private String toekn;
+    private String token;
 
     private static final long serialVersionUID = 1L;
 
@@ -46,11 +43,11 @@ public class UserDTO implements Serializable {
         this.destinyMembershipId = destinyMembershipId;
     }
 
-    public String getToekn() {
-        return toekn;
+    public String getToken() {
+        return token;
     }
 
-    public void setToekn(String toekn) {
-        this.toekn = toekn;
+    public void setToken(String token) {
+        this.token = token;
     }
 }

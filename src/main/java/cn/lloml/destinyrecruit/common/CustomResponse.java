@@ -16,31 +16,37 @@ public class CustomResponse {
         return headers;
     }
 
-    public static <T> ResponseEntity<CustomResponseBody<T>> ok(String message) {
+    public static ResponseEntity<CustomResponseBody> ok(String message) {
         return new ResponseEntity<>(
-                new CustomResponseBody<>(HttpStatus.OK.value(), message, ""),
+                new CustomResponseBody(HttpStatus.OK.value(), message, ""),
                 CustomResponse.getGeneralHeaders(),
                 HttpStatus.OK
         );
     }
 
-    public static <T> ResponseEntity<CustomResponseBody<T>> ok(String message, T data) {
+    public static ResponseEntity<CustomResponseBody> ok(String message, Object data) {
         return new ResponseEntity<>(
-                new CustomResponseBody<>(HttpStatus.OK.value(), message, "", data),
+                new CustomResponseBody(HttpStatus.OK.value(), message, "", data),
                 CustomResponse.getGeneralHeaders(),
                 HttpStatus.OK
         );
     }
 
-    public static <T> ResponseEntity<CustomResponseBody<T>> badRequest(String message) {
+    public static ResponseEntity<CustomResponseBody> badRequest(String message) {
         return new ResponseEntity<>(
-                new CustomResponseBody<>(HttpStatus.BAD_REQUEST.value(), message, "Bad Request"),
+                new CustomResponseBody(HttpStatus.BAD_REQUEST.value(), message, "Bad Request"),
                 CustomResponse.getGeneralHeaders(),
                 HttpStatus.BAD_REQUEST
         );
     }
 
-    public static <T> ResponseEntity<CustomResponseBody<T>> badRequest(List<FieldError> fieldErrorsList) {
+    public static ResponseEntity<CustomResponseBody> notFound(String message){
+        return  new ResponseEntity<>(new CustomResponseBody(HttpStatus.BAD_REQUEST.value(), message, "not found"),
+                CustomResponse.getGeneralHeaders(),
+                HttpStatus.NOT_FOUND);
+    }
+
+    public static ResponseEntity<CustomResponseBody> badRequest(List<FieldError> fieldErrorsList) {
         var messageBuilder = new StringBuilder();
         fieldErrorsList.forEach(fieldError -> {
             messageBuilder.append(fieldError.getField());
@@ -49,22 +55,22 @@ public class CustomResponse {
             messageBuilder.append(". ");
         });
         return new ResponseEntity<>(
-                new CustomResponseBody<>(HttpStatus.BAD_REQUEST.value(),messageBuilder.toString(), "Bad Request"),
+                new CustomResponseBody(HttpStatus.BAD_REQUEST.value(), messageBuilder.toString(), "Bad Request"),
                 CustomResponse.getGeneralHeaders(),
                 HttpStatus.BAD_REQUEST
         );
     }
 
-    public static <T> ResponseEntity<CustomResponseBody<T>> conflict(String message) {
+    public static ResponseEntity<CustomResponseBody> conflict(String message) {
         return new ResponseEntity<>(
-                new CustomResponseBody<>(HttpStatus.CONFLICT.value(), message, "Conflict"),
+                new CustomResponseBody(HttpStatus.CONFLICT.value(), message, "Conflict"),
                 CustomResponse.getGeneralHeaders(),
                 HttpStatus.CONFLICT);
     }
 
-    public static <T> ResponseEntity<CustomResponseBody<T>> forbidden(String message, String error) {
+    public static ResponseEntity<CustomResponseBody> forbidden(String message, String error) {
         return new ResponseEntity<>(
-                new CustomResponseBody<>(HttpStatus.FORBIDDEN.value(), message, error),
+                new CustomResponseBody(HttpStatus.FORBIDDEN.value(), message, error),
                 CustomResponse.getGeneralHeaders(),
                 HttpStatus.FORBIDDEN);
     }
