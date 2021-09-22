@@ -1,7 +1,7 @@
 package cn.lloml.destinyrecruit.controller;
 
 import cn.lloml.destinyrecruit.common.CustomResponse;
-import cn.lloml.destinyrecruit.common.CustomResponseBody;
+import cn.lloml.destinyrecruit.common.ProjectResponseBody;
 
 import cn.lloml.destinyrecruit.dto.UserOfFireTeamDTO;
 import cn.lloml.destinyrecruit.service.FireTeamService;
@@ -30,7 +30,7 @@ public class FireTeamController {
      * @return 火力战队列表
      */
     @GetMapping
-    public ResponseEntity<CustomResponseBody> getFireTeamList() {
+    public ResponseEntity<ProjectResponseBody> getFireTeamList() {
         return CustomResponse.ok("查询成功", fireTeamService.selectDTO());
     }
 
@@ -39,7 +39,7 @@ public class FireTeamController {
      * @return 火力战队
      */
     @GetMapping("/{id}")
-    public ResponseEntity<CustomResponseBody> getFireTeam(@PathVariable String id) {
+    public ResponseEntity<ProjectResponseBody> getFireTeam(@PathVariable String id) {
         var fireTeam = fireTeamService.selectOneDtoPrimaryKey(Long.valueOf(id));
         if (fireTeam == null) {
             return CustomResponse.notFound("找不到这个火力战队");
@@ -49,7 +49,7 @@ public class FireTeamController {
     }
 
     @PostMapping("/{fireTeamId}/user/{userId}")
-    public ResponseEntity<CustomResponseBody> pushUserToFireTeam(@PathVariable String userId, @PathVariable String fireTeamId) {
+    public ResponseEntity<ProjectResponseBody> pushUserToFireTeam(@PathVariable String userId, @PathVariable String fireTeamId) {
         if (fireTeamService.selectOneDTOByUserId(Long.valueOf(userId)) != null) {
             return CustomResponse.badRequest("用户已经加入或者创建了一个火力战队");
         }
@@ -65,7 +65,7 @@ public class FireTeamController {
     }
 
     @DeleteMapping("/{fireTeamId}/user/{userId}")
-    public ResponseEntity<CustomResponseBody> deletedUserFromFireTeam(@PathVariable String userId, @PathVariable String fireTeamId) {
+    public ResponseEntity<ProjectResponseBody> deletedUserFromFireTeam(@PathVariable String userId, @PathVariable String fireTeamId) {
         var fireTeam = fireTeamService.selectOneDtoPrimaryKey(Long.valueOf(fireTeamId));
         if (fireTeam == null) {
             return CustomResponse.notFound("火力战队不存在！");

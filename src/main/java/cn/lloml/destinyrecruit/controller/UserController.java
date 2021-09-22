@@ -2,7 +2,7 @@ package cn.lloml.destinyrecruit.controller;
 
 
 import cn.lloml.destinyrecruit.common.CustomResponse;
-import cn.lloml.destinyrecruit.common.CustomResponseBody;
+import cn.lloml.destinyrecruit.common.ProjectResponseBody;
 import cn.lloml.destinyrecruit.domain.User;
 import cn.lloml.destinyrecruit.dto.FireTeamInsertDTO;
 import cn.lloml.destinyrecruit.dto.UserDTO;
@@ -46,7 +46,7 @@ public class UserController {
      * @return 返回
      */
     @PostMapping
-    public ResponseEntity<CustomResponseBody> postUser(@Validated @RequestBody UserDTO userDto, BindingResult bindingResult) {
+    public ResponseEntity<ProjectResponseBody> postUser(@Validated @RequestBody UserDTO userDto, BindingResult bindingResult) {
         if (null != bindingResult && bindingResult.hasErrors()) {
             return CustomResponse.badRequest(bindingResult.getFieldErrors());
         }
@@ -65,7 +65,7 @@ public class UserController {
     }
 
     @PostMapping("/set_bungieName")
-    public ResponseEntity<CustomResponseBody> setBungieName(@RequestBody Map<String, String> body) {
+    public ResponseEntity<ProjectResponseBody> setBungieName(@RequestBody Map<String, String> body) {
         var bungieName = body.get("bungieName");
         if (bungieName == null) {
             return CustomResponse.badRequest("请求中必须包含棒鸡名");
@@ -81,7 +81,7 @@ public class UserController {
     }
 
     @GetMapping("/bungie_name/{bungieName}")
-    public ResponseEntity<CustomResponseBody> getUserByBungieName(@PathVariable String bungieName) {
+    public ResponseEntity<ProjectResponseBody> getUserByBungieName(@PathVariable String bungieName) {
         var user = userService.selectOneByBungieName(bungieName);
         if (user == null) {
             return CustomResponse.notFound("找不到这个棒鸡名的用户");
@@ -91,7 +91,7 @@ public class UserController {
     }
 
     @GetMapping("/{userId}/fire_team")
-    public ResponseEntity<CustomResponseBody> getFireTeamByUserId(@PathVariable String userId) {
+    public ResponseEntity<ProjectResponseBody> getFireTeamByUserId(@PathVariable String userId) {
         var fireTeam = fireTeamService.selectOneDTOByUserId(Long.valueOf(userId));
         if (fireTeam == null) {
             return CustomResponse.notFound("用户没有加入或者创建任何火力战队");
@@ -101,7 +101,7 @@ public class UserController {
     }
 
     @PostMapping("/{userId}/fire_team")
-    public ResponseEntity<CustomResponseBody> postFireTeam(@PathVariable String userId, @Validated @RequestBody FireTeamInsertDTO fireTeamInsertDTO, BindingResult bindingResult) {
+    public ResponseEntity<ProjectResponseBody> postFireTeam(@PathVariable String userId, @Validated @RequestBody FireTeamInsertDTO fireTeamInsertDTO, BindingResult bindingResult) {
         if (null != bindingResult && bindingResult.hasErrors()) {
             return CustomResponse.badRequest(bindingResult.getFieldErrors());
         }
