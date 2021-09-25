@@ -2,8 +2,7 @@ package cn.lloml.destinyrecruit.domain;
 
 import java.io.Serializable;
 
-public class FireTeamUser implements Serializable {
-    private Long id;
+public class FireTeamUser extends BaseDomain {
 
     private Long fireTeamId;
 
@@ -16,13 +15,6 @@ public class FireTeamUser implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public Long getFireTeamId() {
         return fireTeamId;

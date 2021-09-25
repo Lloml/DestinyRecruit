@@ -7,13 +7,13 @@
         <id column="user__id" jdbcType="BIGINT" property="id"/>
         <result column="user__bungie_name" jdbcType="VARCHAR" property="bungieName"/>
         <result column="user__destiny_membership_id" jdbcType="BIGINT" property="destinyMembershipId"/>
-        <result column="user__toekn" jdbcType="VARCHAR" property="toekn"/>
+        <result column="user__token" jdbcType="VARCHAR" property="token"/>
     </resultMap>
     <sql id="Base_Column_List">
         <!--@mbg.generated-->
         user.id as user__id,user.bungie_name as user__bungie_name,user.destiny_membership_id as
         user__destiny_membership_id,
-        user.toekn as user__toekn
+        user.token as user__token
     </sql>
     <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
         <!--@mbg.generated-->
@@ -31,9 +31,9 @@
     <insert id="insert" parameterType="cn.lloml.destinyrecruit.domain.User">
         <!--@mbg.generated-->
         insert into `user` (id, bungie_name, destiny_membership_id,
-                            toekn)
+        token)
         values (#{id,jdbcType=BIGINT}, #{bungieName,jdbcType=VARCHAR}, #{destinyMembershipId,jdbcType=BIGINT},
-                #{toekn,jdbcType=VARCHAR})
+        #{token,jdbcType=VARCHAR})
     </insert>
     <insert id="insertSelective" parameterType="cn.lloml.destinyrecruit.domain.User">
         <!--@mbg.generated-->
@@ -48,8 +48,8 @@
             <if test="destinyMembershipId != null">
                 destiny_membership_id,
             </if>
-            <if test="toekn != null">
-                toekn,
+            <if test="token != null">
+                token,
             </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -62,8 +62,8 @@
             <if test="destinyMembershipId != null">
                 #{destinyMembershipId,jdbcType=BIGINT},
             </if>
-            <if test="toekn != null">
-                #{toekn,jdbcType=VARCHAR},
+            <if test="token != null">
+                #{token,jdbcType=VARCHAR},
             </if>
         </trim>
     </insert>
@@ -77,8 +77,8 @@
             <if test="destinyMembershipId != null">
                 destiny_membership_id = #{destinyMembershipId,jdbcType=BIGINT},
             </if>
-            <if test="toekn != null">
-                toekn = #{toekn,jdbcType=VARCHAR},
+            <if test="token != null">
+                token = #{token,jdbcType=VARCHAR},
             </if>
         </set>
         where id = #{id,jdbcType=BIGINT}
@@ -86,9 +86,9 @@
     <update id="updateByPrimaryKey" parameterType="cn.lloml.destinyrecruit.domain.User">
         <!--@mbg.generated-->
         update `user`
-        set bungie_name           = #{bungieName,jdbcType=VARCHAR},
-            destiny_membership_id = #{destinyMembershipId,jdbcType=BIGINT},
-            toekn                 = #{toekn,jdbcType=VARCHAR}
+        set bungie_name = #{bungieName,jdbcType=VARCHAR},
+        destiny_membership_id = #{destinyMembershipId,jdbcType=BIGINT},
+        token = #{token,jdbcType=VARCHAR}
         where id = #{id,jdbcType=BIGINT}
     </update>
 
@@ -116,8 +116,8 @@
             <if test="destinyMembershipId != null">
                 and destiny_membership_id = #{destinyMembershipId,jdbcType=BIGINT}
             </if>
-            <if test="toekn != null">
-                and toekn = #{toekn,jdbcType=VARCHAR}
+            <if test="token != null">
+                and token = #{token,jdbcType=VARCHAR}
             </if>
         </where>
     </select>

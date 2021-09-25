@@ -33,14 +33,14 @@ public class HttpClientUtil {
         try {
             response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
         } catch (IOException | InterruptedException e) {
-            logger.error(e.toString());
+            logger.error(e.toString(),this);
             return null;
         }
         if(response.statusCode() >=200 && response.statusCode() <300){
             return JSONObject.parseObject(response.body());
         }else {
-            logger.error(String.valueOf(response.statusCode()));
-            logger.error(response.body());
+            logger.error(String.valueOf(response.statusCode()),this);
+            logger.error(response.body(),this);
             return null;
         }
     }

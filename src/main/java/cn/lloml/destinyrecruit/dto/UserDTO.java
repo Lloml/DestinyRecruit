@@ -6,9 +6,7 @@ import java.io.Serializable;
 import javax.validation.constraints.NotEmpty;
 
 
-public class UserDTO implements Serializable {
-
-    private Long id;
+public class UserDTO extends BaseDTO {
 
     @NotEmpty
     private String bungieName;
@@ -19,13 +17,6 @@ public class UserDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getBungieName() {
         return bungieName;

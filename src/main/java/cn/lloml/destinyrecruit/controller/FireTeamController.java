@@ -78,12 +78,12 @@ public class FireTeamController {
             }
         }
         if (user == null) {
-            return CustomResponse.notFound("请求退出的用户不在这个火力战队中！");
+            return CustomResponse.notFound("请求移除的用户不在这个火力战队中！");
         }
         //如果只有一个成员，直接删除火力战队
         if (fireTeam.getMemberList().size() == 1) {
             fireTeamService.deleteByPrimaryKey(Long.valueOf(fireTeamId));
-            return CustomResponse.ok("退出成功，且火力战队已删除！");
+            return CustomResponse.ok("移除成功，且火力战队已删除！");
         } else {
             fireTeamService.deleteUserFromFireTeam(Long.valueOf(fireTeamId), Long.valueOf(userId));
             //如果用户是火力战队队长，则他退出火力战队后设定新的队长
@@ -96,7 +96,7 @@ public class FireTeamController {
                     }
                 }
             }
-            return CustomResponse.ok("退出火力战队成功");
+            return CustomResponse.ok("移除火力战队成功");
         }
 
     }

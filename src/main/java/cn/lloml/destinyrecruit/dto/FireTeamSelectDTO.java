@@ -8,8 +8,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-public class FireTeamSelectDTO implements Serializable {
-    private Long id;
+public class FireTeamSelectDTO extends BaseDTO{
 
     private String title;
 
@@ -40,14 +39,6 @@ public class FireTeamSelectDTO implements Serializable {
     private Date updateDate;
 
     private static final long serialVersionUID = 1L;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public User getOwner() {
         return Owner;

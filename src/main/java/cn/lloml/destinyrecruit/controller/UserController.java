@@ -6,6 +6,7 @@ import cn.lloml.destinyrecruit.common.ProjectResponseBody;
 import cn.lloml.destinyrecruit.domain.User;
 import cn.lloml.destinyrecruit.dto.FireTeamInsertDTO;
 import cn.lloml.destinyrecruit.dto.UserDTO;
+import cn.lloml.destinyrecruit.dto.UserOfFireTeamDTO;
 import cn.lloml.destinyrecruit.service.BungiePlatformService;
 import cn.lloml.destinyrecruit.service.FireTeamService;
 import cn.lloml.destinyrecruit.service.GameMapService;
@@ -64,11 +65,11 @@ public class UserController {
         return CustomResponse.ok("用户创建成功", user);
     }
 
-    @PostMapping("/set_bungieName")
+    @PostMapping("/set_bungie_name")
     public ResponseEntity<ProjectResponseBody> setBungieName(@RequestBody Map<String, String> body) {
         var bungieName = body.get("bungieName");
-        if (bungieName == null) {
-            return CustomResponse.badRequest("请求中必须包含棒鸡名");
+        if (bungieName == null || bungieName.equals("")) {
+            return CustomResponse.badRequest("请求中必须包含棒鸡名且不为空");
         }
         var user = userService.selectOneByBungieName(bungieName);
         if (user == null) {
@@ -116,5 +117,38 @@ public class UserController {
         }
         fireTeamService.userCreateFireTeamByDTO(fireTeamInsertDTO, Long.valueOf(userId));
         return CustomResponse.ok("火力战队创建完成", fireTeamService.selectOneDTOByUserId(Long.valueOf(userId)));
+    }
+
+    @DeleteMapping("/{userId}/fire_team")
+    public ResponseEntity<ProjectResponseBody> quitFireTeam(@PathVariable String userId) {
+        var fireTeam = fireTeamService.selectOneDTOByUserId(Long.valueOf(userId));
+        if (fireTeam == null) {
+            return CustomResponse.badRequest("用户没有加入或者创建了任何火力战队");
+        }
+        var memberList = fireTeam.getMemberList();
+        UserOfFireTeamDTO user = null;
+        for (UserOfFireTeamDTO member : memberList) {
+            if (member.getId().equals(Long.valueOf(userId))) {
+                user = member;
+            }
+        }
+        if (fireTeam.getMemberList().size() == 1) {
+            fireTeamService.deleteByPrimaryKey(fireTeam.getId());
+            return CustomResponse.ok("退出成功，且火力战队已删除！");
+        } else {
+            fireTeamService.deleteUserFromFireTeam(fireTeam.getId(), Long.valueOf(userId));
+            //如果用户是火力战队队长，则他退出火力战队后设定新的队长
+            assert user != null;
+            if (user.isOwner()) {
+                for (UserOfFireTeamDTO member : memberList) {
+                    //第一个非队长成员，成为新队长
+                    if (!member.isOwner()) {
+                        fireTeamService.updateFireTeamMemberIsOwner(true, fireTeam.getId(), member.getId());
+                        break;
+                    }
+                }
+            }
+            return CustomResponse.ok("退出火力战队成功");
+        }
     }
 }
