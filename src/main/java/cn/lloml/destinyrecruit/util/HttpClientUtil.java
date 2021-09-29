@@ -2,6 +2,7 @@ package cn.lloml.destinyrecruit.util;
 
 import ch.qos.logback.classic.Logger;
 import com.alibaba.fastjson.JSONObject;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Repository;
 
@@ -17,11 +18,10 @@ import java.util.Map;
  * http客户端工具类
  */
 @Repository
+@Slf4j
 public class HttpClientUtil {
     @Resource
     HttpClient httpClient;
-    @Resource
-    Logger logger;
 
     public JSONObject get(String url, Map<String,String> headers){
         HttpRequest.Builder builder = HttpRequest.newBuilder()
@@ -33,14 +33,14 @@ public class HttpClientUtil {
         try {
             response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
         } catch (IOException | InterruptedException e) {
-            logger.error(e.toString(),this);
+            log.error(e.toString(),this);
             return null;
         }
         if(response.statusCode() >=200 && response.statusCode() <300){
             return JSONObject.parseObject(response.body());
         }else {
-            logger.error(String.valueOf(response.statusCode()),this);
-            logger.error(response.body(),this);
+            log.error(String.valueOf(response.statusCode()),this);
+            log.error(response.body(),this);
             return null;
         }
     }
