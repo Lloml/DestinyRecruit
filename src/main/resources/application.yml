@@ -9,6 +9,10 @@ spring:
       enabled: true
       additional-paths: src/main/java
 
+logging:
+  level:
+    cn.lloml.destinyrecruit.common.config.MyChannelInterceptor: debug
+
 mybatis:
   mapper-locations: classpath*:mapper/*.xml
   type-aliases-package: cn.lloml.destinyrecruit.domain

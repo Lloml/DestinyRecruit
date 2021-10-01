@@ -1,4 +1,5 @@
 package cn.lloml.destinyrecruit.mapper;
+import org.apache.ibatis.annotations.Param;
 
 import cn.lloml.destinyrecruit.domain.GameMap;
 import java.util.List;
@@ -19,4 +20,7 @@ public interface GameMapMapper {
     int updateByPrimaryKey(GameMap record);
 
     List<GameMap> selectByAll(GameMap gameMap);
+
+    List<GameMap> selectAll();
+
 }

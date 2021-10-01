@@ -1,5 +1,7 @@
 package cn.lloml.destinyrecruit.domain;
 
+
+
 import java.io.Serializable;
 
 public class BaseDomain implements Serializable {

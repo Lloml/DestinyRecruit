@@ -1,11 +1,15 @@
 package cn.lloml.destinyrecruit.common.config;
 
 import org.springframework.context.annotation.Configuration;
+import org.springframework.messaging.Message;
 import org.springframework.messaging.simp.config.ChannelRegistration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
+
+import java.util.List;
+import java.util.Map;
 
 
 @Configuration
@@ -19,7 +23,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
      */
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/test/web").setAllowedOriginPatterns("*").withSockJS();
+        registry.addEndpoint("/websocket").setAllowedOriginPatterns("*");
     }
 
     /**
@@ -30,9 +34,22 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
         // 设置一个或者多个代理前缀，在 Controller 类中的方法里面发生的消息，会首先转发到代理从而发送到对应广播或者队列中。
-        registry.enableSimpleBroker("/topic");
+        registry.enableSimpleBroker("/queue");
+        registry.enableSimpleBroker("/FireTeam");
         // 配置客户端发送请求消息的一个或多个前缀，该前缀会筛选消息目标转发到 Controller 类中注解对应的方法里
         registry.setApplicationDestinationPrefixes("/app");
+        // 服务端通知特定用户客户端的前缀，可以不设置，默认为user
+        registry.setUserDestinationPrefix("/user");
     }
 
+
+    /**
+     * 配置通道拦截器，用于获取 Header 的 Token 进行鉴权
+     *
+     * @param registration 注册通道配置类
+     */
+    @Override
+    public void configureClientInboundChannel(ChannelRegistration registration) {
+        registration.interceptors(new MyChannelInterceptor());
+    }
 }

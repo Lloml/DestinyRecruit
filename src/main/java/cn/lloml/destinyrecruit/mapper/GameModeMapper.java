@@ -1,4 +1,6 @@
 package cn.lloml.destinyrecruit.mapper;
+import cn.lloml.destinyrecruit.dto.GameModeDTO;
+import org.apache.ibatis.annotations.Param;
 
 import cn.lloml.destinyrecruit.domain.GameMode;
 import java.util.List;
@@ -19,4 +21,8 @@ public interface GameModeMapper {
     int updateByPrimaryKey(GameMode record);
 
     List<GameMode> selectByAll(GameMode gameMode);
+
+    List<GameModeDTO> selectDTOAll();
+
+
 }

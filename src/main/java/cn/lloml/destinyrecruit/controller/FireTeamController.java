@@ -3,11 +3,16 @@ package cn.lloml.destinyrecruit.controller;
 import cn.lloml.destinyrecruit.common.CustomResponse;
 import cn.lloml.destinyrecruit.common.ProjectResponseBody;
 
+import cn.lloml.destinyrecruit.dto.MemberChangeEventInfoDTO;
 import cn.lloml.destinyrecruit.dto.UserOfFireTeamDTO;
+import cn.lloml.destinyrecruit.enumeration.MemberChangeType;
+import cn.lloml.destinyrecruit.event.FireTeamMemberChangeEvent;
 import cn.lloml.destinyrecruit.service.FireTeamService;
 
 import cn.lloml.destinyrecruit.service.GameMapService;
 import cn.lloml.destinyrecruit.service.UserService;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,6 +30,8 @@ public class FireTeamController {
     private GameMapService gameMapService;
     @Resource
     private UserService userService;
+    @Resource
+    private ApplicationEventPublisher applicationEventPublisher;
 
     /**
      * @return 火力战队列表
@@ -61,11 +68,23 @@ public class FireTeamController {
             return CustomResponse.badRequest("火力战队已经满员");
         }
         fireTeamService.pushUserToFireTeam(Long.valueOf(fireTeamId), Long.valueOf(userId), false);
+        var fireTeamInfo = fireTeamService.selectOneDtoPrimaryKey(Long.valueOf(fireTeamId));
+        //发送用户加入事件
+        applicationEventPublisher.publishEvent(
+                new FireTeamMemberChangeEvent(
+                        this,
+                        new MemberChangeEventInfoDTO(
+                                fireTeamInfo,
+                                userService.selectByPrimaryKey(Long.valueOf(userId)),
+                                MemberChangeType.JOIN
+                        )
+                )
+        );
         return CustomResponse.ok("加入火力战队成功");
     }
 
     @DeleteMapping("/{fireTeamId}/user/{userId}")
-    public ResponseEntity<ProjectResponseBody> deletedUserFromFireTeam(@PathVariable String userId, @PathVariable String fireTeamId) {
+    public ResponseEntity<ProjectResponseBody> kickUserFromFireTeam(@PathVariable String userId, @PathVariable String fireTeamId) {
         var fireTeam = fireTeamService.selectOneDtoPrimaryKey(Long.valueOf(fireTeamId));
         if (fireTeam == null) {
             return CustomResponse.notFound("火力战队不存在！");
@@ -96,6 +115,18 @@ public class FireTeamController {
                     }
                 }
             }
+            var fireTeamInfo = fireTeamService.selectOneDtoPrimaryKey(Long.valueOf(fireTeamId));
+            //发送用户踢出事件
+            applicationEventPublisher.publishEvent(
+                    new FireTeamMemberChangeEvent(
+                            this,
+                            new MemberChangeEventInfoDTO(
+                                    fireTeamInfo,
+                                    userService.selectByPrimaryKey(Long.valueOf(userId)),
+                                    MemberChangeType.KICK
+                            )
+                    )
+            );
             return CustomResponse.ok("移除火力战队成功");
         }
 

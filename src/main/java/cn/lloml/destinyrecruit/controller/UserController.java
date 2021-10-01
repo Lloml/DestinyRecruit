@@ -5,12 +5,16 @@ import cn.lloml.destinyrecruit.common.CustomResponse;
 import cn.lloml.destinyrecruit.common.ProjectResponseBody;
 import cn.lloml.destinyrecruit.domain.User;
 import cn.lloml.destinyrecruit.dto.FireTeamInsertDTO;
+import cn.lloml.destinyrecruit.dto.MemberChangeEventInfoDTO;
 import cn.lloml.destinyrecruit.dto.UserDTO;
 import cn.lloml.destinyrecruit.dto.UserOfFireTeamDTO;
+import cn.lloml.destinyrecruit.enumeration.MemberChangeType;
+import cn.lloml.destinyrecruit.event.FireTeamMemberChangeEvent;
 import cn.lloml.destinyrecruit.service.BungiePlatformService;
 import cn.lloml.destinyrecruit.service.FireTeamService;
 import cn.lloml.destinyrecruit.service.GameMapService;
 import cn.lloml.destinyrecruit.service.UserService;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -33,6 +37,8 @@ public class UserController {
     private FireTeamService fireTeamService;
     @Resource
     private GameMapService gameMapService;
+    @Resource
+    private ApplicationEventPublisher applicationEventPublisher;
 
     @GetMapping
     public List<User> getUserList() {
@@ -148,6 +154,18 @@ public class UserController {
                     }
                 }
             }
+            //发送用户退出
+            var fireTeamInfo = fireTeamService.selectOneDtoPrimaryKey(fireTeam.getId());
+            applicationEventPublisher.publishEvent(
+                    new FireTeamMemberChangeEvent(
+                            this,
+                            new MemberChangeEventInfoDTO(
+                                    fireTeamInfo,
+                                    userService.selectByPrimaryKey(Long.valueOf(userId)),
+                                    MemberChangeType.QUIT
+                            )
+                    )
+            );
             return CustomResponse.ok("退出火力战队成功");
         }
     }

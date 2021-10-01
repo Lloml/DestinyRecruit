@@ -1,5 +1,6 @@
 package cn.lloml.destinyrecruit.service;
 
+import cn.lloml.destinyrecruit.dto.GameModeDTO;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import cn.lloml.destinyrecruit.mapper.GameModeMapper;
@@ -45,5 +46,13 @@ public class GameModeService{
     public List<GameMode> selectByAll(GameMode gameMode) {
         return gameModeMapper.selectByAll(gameMode);
     }
+
+	public List<GameModeDTO> selectAll(){
+		 return gameModeMapper.selectDTOAll();
+	}
+
+
+
+
 
 }

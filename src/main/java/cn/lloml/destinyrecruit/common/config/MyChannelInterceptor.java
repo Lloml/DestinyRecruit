@@ -1,12 +1,14 @@
 package cn.lloml.destinyrecruit.common.config;
 
 import cn.lloml.destinyrecruit.domain.User;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.simp.stomp.StompCommand;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.messaging.support.ChannelInterceptor;
 import org.springframework.messaging.support.MessageHeaderAccessor;
+
 import java.security.Principal;
 import java.util.List;
 import java.util.Map;
@@ -16,9 +18,12 @@ import java.util.Map;
  *
  * @author mydlq
  */
+@Slf4j
 public class MyChannelInterceptor implements ChannelInterceptor {
 
-    /** 测试用户与 token 1 */
+    /**
+     * 测试用户与 token 1
+     */
     private User user1 = new User();
 
     /**
@@ -32,19 +37,23 @@ public class MyChannelInterceptor implements ChannelInterceptor {
     public Message<?> preSend(Message<?> message, MessageChannel channel) {
         user1.setIdStr("123456");
         user1.setToken("123456");
-        System.out.println(message);
         StompHeaderAccessor accessor = MessageHeaderAccessor.getAccessor(message, StompHeaderAccessor.class);
         String token = getToken(message);
-        if (token!=null && accessor != null && StompCommand.CONNECT.equals(accessor.getCommand())) {
+        log.debug("websocket连接成功");
+        log.debug(token);
+        if (token != null && accessor != null && StompCommand.CONNECT.equals(accessor.getCommand())) {
             Principal user = null;
             // 提前创建好两个测试 token 进行匹配，方便测试
-            if (this.user1.getToken().equals(token)){
+            if (this.user1.getToken().equals(token)) {
                 user = () -> this.user1.getIdStr();
             }
             accessor.setUser(user);
+            return message;
+        } else {
+            return null;
         }
-        return message;
     }
+
 
     /**
      * 从 Header 中获取 TOKEN
@@ -52,10 +61,10 @@ public class MyChannelInterceptor implements ChannelInterceptor {
      * @param message 消息对象
      * @return TOKEN
      */
-    private String getToken(Message<?> message){
-        Map<String,Object> headers = (Map<String, Object>) message.getHeaders().get("nativeHeaders");
-        if (headers !=null && headers.containsKey("token")){
-            List<String> token = (List<String>)headers.get("token");
+    private String getToken(Message<?> message) {
+        Map<String, Object> headers = (Map<String, Object>) message.getHeaders().get("nativeHeaders");
+        if (headers != null && headers.containsKey("token")) {
+            List<String> token = (List<String>) headers.get("token");
             return String.valueOf(token.get(0));
         }
         return null;

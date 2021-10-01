@@ -46,4 +46,11 @@ public class GameMapService{
         return gameMapMapper.selectByAll(gameMap);
     }
 
+	public List<GameMap> selectAll(){
+		 return gameMapMapper.selectAll();
+	}
+
+
+
+
 }

@@ -9,6 +9,9 @@
         <result column="game_mode__max_number" jdbcType="INTEGER" property="maxNumber"/>
         <result column="game_mode__img_url" jdbcType="VARCHAR" property="imgUrl"/>
     </resultMap>
+    <resultMap id="DTOResultMap" type="cn.lloml.destinyrecruit.dto.GameModeDTO" extends="BaseResultMap">
+        <collection property="gameMapList" ofType="cn.lloml.destinyrecruit.domain.GameMap" resultMap="cn.lloml.destinyrecruit.mapper.GameMapMapper.BaseResultMap"/>
+    </resultMap>
     <sql id="Base_Column_List">
         <!--@mbg.generated-->
         game_mode.id as game_mode__id, game_mode.`name` as game_mode__name, game_mode.max_number as
@@ -110,5 +113,18 @@
                 and img_url = #{imgUrl,jdbcType=VARCHAR}
             </if>
         </where>
+    </select>
+
+    <select id="selectDTOAll" resultMap="DTOResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        ,
+        <include refid="cn.lloml.destinyrecruit.mapper.GameMapMapper.Base_Column_List"/>
+        FROM
+        game_mode
+        LEFT JOIN
+        game_map
+        ON
+        game_mode.id = game_map.game_mode_id
     </select>
 </mapper>
